@@ -1,0 +1,14 @@
+body{
+  background-color: #0f132a;
+}
+.App{
+  width: 60%;
+  margin: auto !important;
+}
+@media (max-width: 991px) {
+.App{
+  width: 100%;
+  margin: auto !important;
+  
+}
+  }
