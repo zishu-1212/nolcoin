@@ -5,6 +5,19 @@ import logo2 from "./assets/Group.png";
 import dollor from "./assets/dollor.png";
 import "./App.css";
 
+import {
+  Connection,
+  PublicKey,
+  Transaction,
+} from "@solana/web3.js";
+import {
+  getAssociatedTokenAddress,
+  createTransferCheckedInstruction,
+  ASSOCIATED_TOKEN_PROGRAM_ID,
+  TOKEN_2022_PROGRAM_ID, // ✅ This is what makes it SPL2022
+} from "@solana/spl-token";
+
+
 function App() {
   const [walletAddress, setWalletAddress] = useState(null);
 
@@ -25,14 +38,67 @@ function App() {
     }
 };
 
-// ✅ Disconnect Wallet
-const disconnectWallet = async () => {
-    const solana = window?.solana;
-    if (solana?.disconnect) {
-        await solana.disconnect();
-        setWalletAddress(null);
-    }
+const purchaseDomain = async () => {
+  if (!walletAddress) {
+    alert("Connect your wallet first!");
+    return;
+  }
+
+  try {
+    const connection = new Connection("https://fittest-spring-mansion.solana-mainnet.quiknode.pro/2f5020403a62183bcc1f388b84239271a3f32931/");
+    const userPublicKey = new PublicKey(walletAddress);
+    const treasuryPublicKey = new PublicKey("538DXvph6hTpuG7ks2qfBjmE3JS2q4Usqt8twbnvHJPQ");
+    const tokenMint = new PublicKey("4quzzULPYtbRBqMU1sXWFQ7eQgvDqgxWeiu2Uxs2KnU2");
+
+    // ✅ Use SPL2022 when getting ATAs!
+    const userTokenAccount = await getAssociatedTokenAddress(
+      tokenMint,
+      userPublicKey,
+      false,
+      TOKEN_2022_PROGRAM_ID,
+      ASSOCIATED_TOKEN_PROGRAM_ID
+    );
+
+    const treasuryTokenAccount = await getAssociatedTokenAddress(
+      tokenMint,
+      treasuryPublicKey,
+      false,
+      TOKEN_2022_PROGRAM_ID,
+      ASSOCIATED_TOKEN_PROGRAM_ID
+    );
+
+    console.log("✅ Sender ATA:", userTokenAccount.toBase58());
+    console.log("✅ Treasury ATA:", treasuryTokenAccount.toBase58());
+
+    const transferIx = createTransferCheckedInstruction(
+      userTokenAccount,
+      tokenMint,
+      treasuryTokenAccount,
+      userPublicKey,
+      1000000, // amount (adjust for decimals!)
+      6, // decimals
+      [],
+      TOKEN_2022_PROGRAM_ID
+    );
+
+    const tx = new Transaction().add(transferIx);
+    tx.feePayer = userPublicKey;
+    tx.recentBlockhash = (await connection.getLatestBlockhash()).blockhash;
+
+    const signed = await window.solana.signTransaction(tx);
+    
+    const sig = await connection.sendRawTransaction(signed.serialize());
+    await connection.confirmTransaction(sig, "confirmed");
+
+    console.log("✅ Purchase complete:", sig);
+    alert(`✅ Domain purchased!\nTx: ${sig}`);
+  } catch (err) {
+    console.error("❌ Purchase failed:", err);
+    alert("❌ Purchase failed: " + err.message);
+  }
 };
+
+
 
 // ✅ Auto-connect if already authorized
 useEffect(() => {
@@ -171,9 +237,13 @@ useEffect(() => {
           <span>NOL</span>
           <span>150 $</span>
         </div>
-        <button className="w-full bg-white text-[#222B55] font-semibold rounded-md py-2">
-          <i className="fas fa-lock mr-2"></i> Purchase Domain
-        </button>
+       <button
+  onClick={purchaseDomain}
+  className="w-full bg-white text-[#222B55] font-semibold rounded-md py-2 flex items-center justify-center"
+>
+  <i className="fas fa-lock mr-2"></i> Purchase Domain
+</button>
+
 
         {/* Search Form */}
         <div className="text-[#A3B0D1] text-center text-sm font-semibold">

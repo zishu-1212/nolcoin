@@ -1,10 +1,16 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.jsx'
+// ✅ Add at very top
+import { Buffer } from "buffer";
+if (!window.Buffer) {
+  window.Buffer = Buffer;
+}
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
+// Now your React app
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App.jsx";
+
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
     <App />
-  </StrictMode>,
-)
+  </React.StrictMode>
+);
