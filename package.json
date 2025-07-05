@@ -13,6 +13,7 @@
     "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
     "@solana/spl-token": "^0.4.13",
     "@solana/web3.js": "^1.98.2",
+    "axios": "^1.10.0",
     "bs58": "^6.0.0",
     "buffer": "^6.0.3",
     "process": "^0.11.10",

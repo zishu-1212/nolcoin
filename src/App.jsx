@@ -4,7 +4,7 @@ import logo from "./assets/logo.png";
 import logo2 from "./assets/Group.png";
 import dollor from "./assets/dollor.png";
 import "./App.css";
-
+import axios from "axios";
 import {
   Connection,
   PublicKey,
@@ -132,24 +132,62 @@ useEffect(() => {
     }
 }, []);
 
-  return (
-    <div className="App p-3">
-      <header className="flex flex-col-reverse md:flex-row justify-between md:items-center ">
-        <div className="flex flex-row-reverse md:flex-row items-center space-x-1">
-          <img
-            alt="Logo"
-            className="w-28 h-28 object-contain"
-            height="60"
-            loading="lazy"
-            src={logo}
-            width="60"
-          />
-          <h1 className="text-white text-lg font-semibold leading-tight max-w-xs">
-            Purchase Airport Domain Ownership
-          </h1>
-        </div>
 
-        {/* ✅ Phantom Connect Button */}
+
+
+  const [airport, setAirport] = useState(null); // not an array
+  const [formData, setFormData] = useState({
+    name: "",
+    country: "",
+    iata_code: "",
+  }); 
+    const [result, setResult] = useState(null);
+  useEffect(() => {
+    const fetchAirport = async () => {
+      try {
+        const res = await axios.get(
+          "https://corsproxy.io/?https://avaxbot1122-8ee0ed24283e.herokuapp.com/api/getTopAirport"
+        );
+        console.log("API Response:", res.data);
+        setAirport(res.data?.data || null);
+      } catch (error) {
+        console.error("Error fetching airport:", error);
+      }
+    };
+
+    fetchAirport();
+  }, []);
+
+  if (!airport) return <div className="text-white">Loading...</div>;
+
+
+  // Handle form inputs
+  const handleChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  // Submit search
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post(
+        "https://corsproxy.io/?" +
+          "https://avaxbot1122-8ee0ed24283e.herokuapp.com/api/search",
+        formData
+      );
+      setResult(res.data?.data);
+    } catch (error) {
+      console.error("Search error:", error);
+      setResult(null);
+    }
+  };
+  return (
+    <div className=" p-3 pt-5">
+      <div className="  px-5 connectwallet1">   {/* ✅ Phantom Connect Button */}
+      <div className="  px-5 connectwallet">   {/* ✅ Phantom Connect Button */}
         {walletAddress ? (
           <div className="flex flex-col items-start text-white text-sm font-semibold">
             <button
@@ -170,6 +208,7 @@ useEffect(() => {
             onClick={connectWallet}
             className="flex space-x-4 items-center bg-white text-[#0B1437] text-sm font-semibold rounded py-2 px-3"
             type="button"
+            style={{width:"fit-content"}}
           >
             <span className="text-[16px] font-bold">Connect</span>
             <span className="flex items-center text-black text-[13px] font-bold">
@@ -181,39 +220,52 @@ useEffect(() => {
               Phantom
             </span>
           </button>
-        )}
+        )}</div></div>
+        <div className="App">
+      <header className=" flex flex-col-reverse md:flex-row justify-between md:items-center ">
+        <div className="flex flex-row-reverse md:flex-row items-center space-x-1" style={{width:"fit-content"}}>
+          <img
+            alt="Logo"
+            className="w-40 h-40 object-contain"
+            height="80"
+            loading="lazy"
+            src={logo}
+            width="80"
+          />
+          <h1 className="text-white  text-lg font-bold leading-tight max-w-" style={{fontSize:"22px"}}>
+            Purchase Airport Domain Ownership
+          </h1>
+        </div>
+
+     
       </header>
 
       <div className="w-full space-y-4">
         {/* Airport Card */}
-        <div className="bg-[#293050] rounded-lg p-4 space-y-3">
-          <div className="flex justify-between items-start">
-            <div className="flex items-center space-x-2">
-              <FaStar className="text-yellow-400" />
-              <span className="text-xs text-yellow-400 font-semibold">
-                Recommend
-              </span>
-            </div>
-            <div className="bg-[#2E3670] text-xs font-semibold rounded px-2 py-1">
-              JFK
-            </div>
-          </div>
-          <h1 className="text-white text-lg font-semibold leading-tight">
-            John F. Kennedy International Airport
-          </h1>
-          <div className="flex justify-between">
-            <div className="items-center space-x-2 text-[#A3B0D1] text-xs font-medium">
-              <span className="flex items-center">
-                <FaPlaneDeparture className="me-2" /> United States
-              </span>
-              <br />
-              <span className="text-[#A3B0D1] font-normal">
-                7.5M Monthly Passengers
-              </span>
-            </div>
-            <div className="text-[#A3B0D1] text-xs font-semibold">Tier 1</div>
-          </div>
+<div className="bg-[#293050] rounded-lg p-4 space-y-3">
+      <div className="flex justify-between items-start">
+        <div className="flex items-center space-x-2">
+          <FaStar className="text-yellow-400" />
+          <span className="text-xs text-yellow-400 font-semibold">Recommend</span>
         </div>
+        <div className="bg-[#2E3670] text-white text-md font-semibold rounded px-2 py-1">
+          {airport.iata_code}
+        </div>
+      </div>
+      <h1 className="text-white text-lg font-semibold leading-tight">
+        {airport.name}
+      </h1>
+      <div className="flex justify-between">
+        <div className="items-center space-x-2 text-[#A3B0D1] text-xs font-medium">
+          <span className="flex items-center">
+            <FaPlaneDeparture className="me-2" /> {airport.country}
+          </span>
+        </div>
+        <div className="text-[#A3B0D1] text-xs font-semibold">
+          Tier {airport.tire}
+        </div>
+      </div>
+    </div>
 
         {/* Domain info */}
         <div className="bg-[#222B55] rounded-lg p-4 flex items-center space-x-3">
@@ -235,7 +287,7 @@ useEffect(() => {
         {/* Price and purchase */}
         <div className="bg-[#222B55] rounded-lg p-4 flex justify-between items-center text-[#A3B0D1] font-semibold text-sm">
           <span>NOL</span>
-          <span>150 $</span>
+          <span>{airport.price} nol</span>
         </div>
        <button
   onClick={purchaseDomain}
@@ -249,31 +301,61 @@ useEffect(() => {
         <div className="text-[#A3B0D1] text-center text-sm font-semibold">
           Can't find your airport?
         </div>
-        <form className="space-y-3">
-          <input
-            type="text"
-            placeholder="Enter Full airport name"
-            className="w-full bg-[#222B55] rounded-md py-2 px-3 text-[#A3B0D1] placeholder-[#A3B0D1] text-sm font-semibold focus:outline-none"
-          />
-          <input
-            type="text"
-            placeholder="City,Country"
-            className="w-full bg-[#222B55] rounded-md py-2 px-3 text-[#A3B0D1] placeholder-[#A3B0D1] text-sm font-semibold focus:outline-none"
-          />
-          <input
-            type="text"
-            placeholder="3 Letter IATA Code"
-            className="w-full bg-[#222B55] rounded-md py-2 px-3 text-[#A3B0D1] placeholder-[#A3B0D1] text-sm font-semibold focus:outline-none"
-          />
-          <button
-            type="submit"
-            className="w-full bg-[#4B5FD3] rounded-md py-2 text-white font-semibold text-sm"
-          >
-            Search
-          </button>
-        </form>
-      </div>
+       <div className="space-y-6">
+      <form className="space-y-3" onSubmit={handleSubmit}>
+        <input
+          type="text"
+          name="name"
+          placeholder="Enter Full airport name"
+          value={formData.name}
+          onChange={handleChange}
+          className="w-full bg-[#222B55] rounded-md py-2 px-3 text-[#A3B0D1] placeholder-[#A3B0D1] text-sm font-semibold focus:outline-none"
+        />
+        <input
+          type="text"
+          name="country"
+          placeholder="City,Country"
+          value={formData.country}
+          onChange={handleChange}
+          className="w-full bg-[#222B55] rounded-md py-2 px-3 text-[#A3B0D1] placeholder-[#A3B0D1] text-sm font-semibold focus:outline-none"
+        />
+        <input
+          type="text"
+          name="iata_code"
+          placeholder="3 Letter IATA Code"
+          value={formData.iata_code}
+          onChange={handleChange}
+          className="w-full bg-[#222B55] rounded-md py-2 px-3 text-[#A3B0D1] placeholder-[#A3B0D1] text-sm font-semibold focus:outline-none"
+        />
+        <button
+          type="submit"
+          className="w-full bg-[#4B5FD3] rounded-md py-2 text-white font-semibold text-sm"
+        >
+          Search
+        </button>
+      </form>
+
+      {/* Result Display */}
+      {result && (
+        <div className="bg-[#293050] rounded-lg p-4 space-y-3">
+          <h1 className="text-white text-lg font-semibold">
+            {result.name}
+          </h1>
+          <p className="text-[#A3B0D1] text-sm">
+            Country: {result.country}
+          </p>
+          <p className="text-[#A3B0D1] text-sm">
+            IATA: {result.iata_code}
+          </p>
+          <p className="text-[#A3B0D1] text-sm">
+            Tier: {result.tire}
+          </p>
+        </div>
+      )}
     </div>
+  
+      </div>
+    </div></div>
   );
 }
 
