@@ -174,10 +174,13 @@ useEffect(() => {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "https://corsproxy.io/?" +
           "https://avaxbot1122-8ee0ed24283e.herokuapp.com/api/search",
-        formData
+        {
+          IATA: "JFK"   
+        }
       );
+      console.log("response",res);
+      
       setResult(res.data?.data);
     } catch (error) {
       console.error("Search error:", error);
