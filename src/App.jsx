@@ -85,6 +85,7 @@ function App() {
       setResult(null); // Optional: clear previous result if status is false
     } else {
       setResult(responseData);
+       toast.success("your getting domain");
     }
 
   } catch (error) {
