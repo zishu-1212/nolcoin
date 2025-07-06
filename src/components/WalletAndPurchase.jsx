@@ -3,6 +3,8 @@ import { FaStar, FaPlaneDeparture } from "react-icons/fa";
 import dollor from "../assets/dollor.png";
 import logo2 from "../assets/Group.png";
 import { toast } from "react-toastify";
+import logo from "../assets/logo.png";
+
 import {
   Connection,
   PublicKey,
@@ -76,9 +78,9 @@ const WalletAndPurchase = ({
         tokenMint,
         treasuryTokenAccount,
         userPublicKey,
-//   parseInt(displayData.Price * 10 ** 6), // 💡 converted from float to integer
+  parseInt(displayData.Price * 10 ** 6), // 💡 converted from float to integer
 
-        1000000,
+        // 1000000,
         6,
         [],
         TOKEN_2022_PROGRAM_ID
@@ -114,6 +116,15 @@ const WalletAndPurchase = ({
 
   return (
     <>
+
+       <header className="flex flex-col-reverse md:flex-row justify-between md:items-center">
+                <div className="flex flex-row-reverse md:flex-row items-center space-x-1">
+                  <img alt="Logo" className="w-40 h-40 object-contain" src={logo} />
+                  <h1 className="text-white text-lg font-bold leading-tight" style={{ fontSize: "22px" }}>
+                    Purchase Airport Domain Ownership
+                  </h1>
+                </div>
+            
       <div className="px-5 connectwallet1">
         <div className="px-5 connectwallet">
           {walletAddress ? (
@@ -143,27 +154,27 @@ const WalletAndPurchase = ({
           )}
         </div>
       </div>
-
+  </header>
       {displayData && (
         <>
-          <div className="bg-[#222B55] rounded-lg p-4 space-y-3 mt-4">
-            <div className="flex justify-between items-start">
+          <div className="bg-[#222B55] rounded-lg  space-y-1 ">
+            <div className="flex justify-between items-start px-4 pt-3">
               <div className="flex items-center space-x-2">
                 <FaStar className="text-yellow-400" />
                 <span className="text-xs text-yellow-400 font-semibold">
                   Recommend
                 </span>
               </div>
-              <div className="bg-[#2E3670] text-white text-md font-semibold rounded px-2 py-1">
+              <div className="bg-[#2E3670] text-white text-md font-semibold rounded px-2 ">
                 {displayData.iata}
               </div>
             </div>
 
-            <h1 className="text-white text-lg font-semibold leading-tight">
+            <h1 className="text-white text-lg font-semibold  px-4 m-0">
               {displayData.name}
             </h1>
 
-            <div className="flex justify-between">
+            <div className="flex justify-between px-4 pb-3">
               <div className="items-center space-x-2 text-[#A3B0D1] text-xs font-medium">
                 <span className="flex items-center">
                   <FaPlaneDeparture className="me-2" /> {displayData.country}
@@ -173,11 +184,13 @@ const WalletAndPurchase = ({
                 Tier {displayData.tier}
               </div>
             </div>
-          </div>
-
-          <div className="bg-[#222B55] rounded-lg p-4 flex items-center space-x-3 mt-2">
+<div className=""style={{borderBottom:"1px solid rgba(78, 87, 131, 1)   "}}></div>
+ <div className="  p-5 flex items-center space-x-3 ">
             <div>
-              <div className="text-[#00C853] text-xs font-semibold flex items-center space-x-1">
+                  <div className="text-[#A3B0D1]  font-semibold"style={{fontSize:"14px"}}>
+                jfk.norda.sol
+              </div>
+              <div className="text-[#00C853]  font-semibold flex items-center space-x-1" style={{fontSize:"14px"}}>
                 <img
                   alt="Dollar icon"
                   className="w-3 h-3 object-contain"
@@ -185,16 +198,30 @@ const WalletAndPurchase = ({
                 />
                 <span>Available</span>
               </div>
-              <div className="text-[#A3B0D1] text-xs font-semibold">
-                jfk.norda.sol
-              </div>
+            
             </div>
           </div>
-
-          <div className="bg-[#222B55] rounded-lg p-4 flex justify-between items-center text-[#A3B0D1] font-semibold text-sm mt-2">
-            <span>NOL</span>
-            <span>{displayData.Price} nol</span>
           </div>
+
+         
+
+          <div className="flex items-center justify-between max-w-full  py-4 pt-5 ">
+          <div className="flex items-center space-x-1">
+            <div className="w-5 h-5 rounded-full border-2 border-white flex items-center justify-center">
+              <div className="w-2.5 h-2.5 rounded-full bg-white"></div>
+            </div>
+            <span className="text-white text-[16px] font-normal font-['Roboto'] select-none">NOL</span>
+          </div>
+         <div
+  className="mt-2 hidden md:block"
+  style={{
+    borderBottom: "1px solid rgba(87, 95, 135, 1)",
+    width: "85%",
+  }}
+></div>
+
+          <span className="text-white text-[16px] font-normal font-['Roboto'] select-none">{displayData.Price} Nol</span>
+        </div>
 
           <button
             onClick={purchaseDomain}

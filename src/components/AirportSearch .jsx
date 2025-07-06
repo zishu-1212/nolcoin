@@ -4,7 +4,7 @@ const AirportSearch = ({ formData, handleChange, handleSubmit }) => {
     
   return (
     <div className="space-y-6 mt-8">
-      <div className="text-[#A3B0D1] text-center text-sm font-semibold">
+      <div className="text-[#A3B0D1] text-center font-semibold">
         Can't find your airport?
       </div>
       <form className="space-y-3" onSubmit={handleSubmit}>

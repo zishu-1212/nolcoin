@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
-import logo from "./assets/logo.png";
 import "./App.css"
 
 import WalletAndPurchase from "./components/WalletAndPurchase";
@@ -25,7 +24,7 @@ function App() {
       const res = await solana.connect();
       setWalletAddress(res.publicKey.toString());
     } catch (err) {
-      console.error("Wallet connection error:", err);
+        toast.error("Wallet connection error:", err);
     }
   };
 
@@ -62,45 +61,45 @@ function App() {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+ const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    if (!formData.IATA.trim()) {
-      toast.error("Please enter IATA code.");
-      return;
+  if (!formData.IATA.trim()) {
+    toast.error("Please enter IATA code.");
+    return;
+  }
+
+  try {
+    const payload = { IATA: formData.IATA.toUpperCase() };
+    console.log("Sending search payload:", payload);
+
+    const res = await axios.post(
+      "https://avaxbot1122-8ee0ed24283e.herokuapp.com/api/search",
+      payload
+    );
+
+    const responseData = res.data?.data;
+
+    if (res.data?.status === false) {
+      toast.info("jfk.norda.sol available change here from jfk to searched IATA");
+      setResult(null); // Optional: clear previous result if status is false
+    } else {
+      setResult(responseData);
     }
 
-    try {
-      const payload = { IATA: formData.IATA.toUpperCase() };
-      console.log("Sending search payload:", payload);
-
-      const res = await axios.post(
-        "https://avaxbot1122-8ee0ed24283e.herokuapp.com/api/search",
-        payload
-      );
-
-      console.log("Search Result:", res.data);
-      setResult(res.data?.data);
-    } catch (error) {
-      console.error("Search error:", error);
-      toast.error("❌ Airport not found. Make sure the IATA code is correct.");
-      setResult(null);
-    }
-  };
+  } catch (error) {
+    console.error("Search error:", error);
+    toast.error("❌ Airport not found. Make sure the IATA code is correct.");
+    setResult(null);
+  }
+};
 
   return (
     <>
       <ToastContainer />
       <div className="p-3 pt-5">
         <div className="App">
-          <header className="flex flex-col-reverse md:flex-row justify-between md:items-center">
-            <div className="flex flex-row-reverse md:flex-row items-center space-x-1">
-              <img alt="Logo" className="w-40 h-40 object-contain" src={logo} />
-              <h1 className="text-white text-lg font-bold leading-tight" style={{ fontSize: "22px" }}>
-                Purchase Airport Domain Ownership
-              </h1>
-            </div>
-          </header>
+       
 
           <WalletAndPurchase
             walletAddress={walletAddress}
