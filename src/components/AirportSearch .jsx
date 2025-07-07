@@ -8,7 +8,7 @@ const AirportSearch = ({ formData, handleChange, handleSubmit }) => {
         Can't find your airport?
       </div>
       <form className="space-y-3" onSubmit={handleSubmit}>
-        <input
+        {/* <input
           type="text"
           name="name"
           placeholder="Enter Full airport name"
@@ -23,7 +23,7 @@ const AirportSearch = ({ formData, handleChange, handleSubmit }) => {
           value={formData.country || ""}
           onChange={handleChange}
           className="w-full bg-[#222B55] rounded-md py-2 px-3 text-[#A3B0D1] placeholder-[#A3B0D1] text-sm font-semibold focus:outline-none"
-        />
+        /> */}
         <input
           type="text"
           name="IATA"

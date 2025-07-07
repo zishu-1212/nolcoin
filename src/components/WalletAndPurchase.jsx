@@ -187,7 +187,7 @@ const WalletAndPurchase = ({
 <div className=""style={{borderBottom:"1px solid rgba(78, 87, 131, 1)   "}}></div>
  <div className="  p-5 flex items-center space-x-3 ">
             <div>
-                  <div className="text-[#A3B0D1]  font-semibold"style={{fontSize:"14px"}}>
+                  <div className="text-[#A3B0D1] lowercase font-semibold"style={{fontSize:"14px"}}>
                 {displayData.iata}.norda.sol
               </div>
               <div className="text-[#00C853]  font-semibold flex items-center space-x-1" style={{fontSize:"14px"}}>
