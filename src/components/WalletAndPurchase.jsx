@@ -5,11 +5,7 @@ import logo2 from "../assets/Group.png";
 import { toast } from "react-toastify";
 import logo from "../assets/logo.png";
 
-import {
-  Connection,
-  PublicKey,
-  Transaction
-} from "@solana/web3.js";
+import { Connection, PublicKey, Transaction } from "@solana/web3.js";
 import {
   getAssociatedTokenAddress,
   createTransferCheckedInstruction,
@@ -52,10 +48,40 @@ const WalletAndPurchase = ({
     }
 
     try {
-      const connection = new Connection("https://fittest-spring-mansion.solana-mainnet.quiknode.pro/2f5020403a62183bcc1f388b84239271a3f32931/");
+      // ✅ Check minting eligibility before proceeding
+      const checkRes = await fetch(
+        "https://avaxbot1122-8ee0ed24283e.herokuapp.com/api/getUserMintLimit",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ wallet_address: walletAddress }),
+        }
+      );
+
+      const checkData = await checkRes.json();
+
+      if (!checkData.status) {
+        toast.error(
+          checkData.message || "You are not allowed to mint at this time."
+        );
+        return;
+      }
+      // console.log("checkData.status", checkData.status);
+      // console.log("checkData.status", checkData.count);
+
+      // ✅ Continue to payment if eligible
+      const connection = new Connection(
+        "https://fittest-spring-mansion.solana-mainnet.quiknode.pro/2f5020403a62183bcc1f388b84239271a3f32931/"
+      );
       const userPublicKey = new PublicKey(walletAddress);
-      const treasuryPublicKey = new PublicKey("538DXvph6hTpuG7ks2qfBjmE3JS2q4Usqt8twbnvHJPQ");
-      const tokenMint = new PublicKey("4quzzULPYtbRBqMU1sXWFQ7eQgvDqgxWeiu2Uxs2KnU2");
+      const treasuryPublicKey = new PublicKey(
+        "538DXvph6hTpuG7ks2qfBjmE3JS2q4Usqt8twbnvHJPQ"
+      );
+      const tokenMint = new PublicKey(
+        "4quzzULPYtbRBqMU1sXWFQ7eQgvDqgxWeiu2Uxs2KnU2"
+      );
 
       const userTokenAccount = await getAssociatedTokenAddress(
         tokenMint,
@@ -78,8 +104,7 @@ const WalletAndPurchase = ({
         tokenMint,
         treasuryTokenAccount,
         userPublicKey,
-  parseInt(displayData.Price * 10 ** 6), // 💡 converted from float to integer
-
+        parseInt(displayData.Price * 10 ** 6),
         // 1000000,
         6,
         [],
@@ -95,19 +120,24 @@ const WalletAndPurchase = ({
       await connection.confirmTransaction(sig, "confirmed");
 
       const iataCode = displayData?.iata || "XXX";
-      await fetch("https://avaxbot1122-8ee0ed24283e.herokuapp.com/api/payment", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          wallet_address: walletAddress,
-          iata_code: iataCode,
-          payment_tx: sig,
-        }),
-      });
+      await fetch(
+        "https://avaxbot1122-8ee0ed24283e.herokuapp.com/api/payment",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            wallet_address: walletAddress,
+            iata_code: iataCode,
+            payment_tx: sig,
+          }),
+        }
+      );
 
-      toast.success("Your payment has sent, your domain will be minted shortly");
+      toast.success(
+        "Your payment has been sent, your domain will be minted shortly"
+      );
     } catch (err) {
       console.error("❌ Purchase failed:", err);
       toast.error("❌ Purchase failed: " + err.message);
@@ -116,45 +146,47 @@ const WalletAndPurchase = ({
 
   return (
     <>
-
-       <header className="flex flex-col-reverse md:flex-row justify-between md:items-center">
-                <div className="flex flex-row-reverse md:flex-row items-center space-x-1">
-                  <img alt="Logo" className="w-40 h-40 object-contain" src={logo} />
-                  <h1 className="text-white text-lg font-bold leading-tight" style={{ fontSize: "22px" }}>
-                    Purchase Airport Domain Ownership
-                  </h1>
-                </div>
-            
-      <div className="px-5 connectwallet1">
-        <div className="px-5 connectwallet">
-          {walletAddress ? (
-            <button
-              onClick={connectWallet}
-              className="flex space-x-4 items-center bg-white text-[#0B1437] text-sm font-semibold rounded py-2 px-3"
-            >
-              <span className="text-[16px] font-bold">
-                {shortenAddress(walletAddress)}
-              </span>
-            </button>
-          ) : (
-            <button
-              onClick={connectWallet}
-              className="flex space-x-4 items-center bg-white text-[#0B1437] text-sm font-semibold rounded py-2 px-3"
-            >
-              <span className="text-[16px] font-bold">Connect</span>
-              <span className="flex items-center text-black text-[13px] font-bold">
-                <img
-                  alt="Phantom"
-                  className="w-5 h-5 object-contain mr-1"
-                  src={logo2}
-                />
-                Phantom
-              </span>
-            </button>
-          )}
+      <header className="flex flex-col-reverse md:flex-row justify-between md:items-center">
+        <div className="flex flex-row-reverse md:flex-row items-center space-x-1">
+          <img alt="Logo" className="w-40 h-40 object-contain" src={logo} />
+          <h1
+            className="text-white text-lg font-bold leading-tight"
+            style={{ fontSize: "22px" }}
+          >
+            Purchase Airport Domain Ownership
+          </h1>
         </div>
-      </div>
-  </header>
+
+        <div className="px-5 connectwallet1">
+          <div className="px-5 connectwallet">
+            {walletAddress ? (
+              <button
+                onClick={connectWallet}
+                className="flex space-x-4 items-center bg-white text-[#0B1437] text-sm font-semibold rounded py-2 px-3"
+              >
+                <span className="text-[16px] font-bold">
+                  {shortenAddress(walletAddress)}
+                </span>
+              </button>
+            ) : (
+              <button
+                onClick={connectWallet}
+                className="flex space-x-4 items-center bg-white text-[#0B1437] text-sm font-semibold rounded py-2 px-3"
+              >
+                <span className="text-[16px] font-bold">Connect</span>
+                <span className="flex items-center text-black text-[13px] font-bold">
+                  <img
+                    alt="Phantom"
+                    className="w-5 h-5 object-contain mr-1"
+                    src={logo2}
+                  />
+                  Phantom
+                </span>
+              </button>
+            )}
+          </div>
+        </div>
+      </header>
       {displayData && (
         <>
           <div className="bg-[#222B55] rounded-lg  space-y-1 ">
@@ -162,7 +194,7 @@ const WalletAndPurchase = ({
               <div className="flex items-center space-x-2">
                 <FaStar className="text-yellow-400" />
                 <span className="text-xs text-yellow-400 font-semibold">
-                  Recommend
+                  Selected Airport
                 </span>
               </div>
               <div className="bg-[#2E3670] text-white text-md font-semibold rounded px-2 ">
@@ -184,44 +216,54 @@ const WalletAndPurchase = ({
                 Tier {displayData.tier}
               </div>
             </div>
-<div className=""style={{borderBottom:"1px solid rgba(78, 87, 131, 1)   "}}></div>
- <div className="  p-5 flex items-center space-x-3 ">
-            <div>
-                  <div className="text-[#A3B0D1] lowercase font-semibold"style={{fontSize:"14px"}}>
-                {displayData.iata}.norda.sol
+            <div
+              className=""
+              style={{ borderBottom: "1px solid rgba(78, 87, 131, 1)   " }}
+            ></div>
+            <div className="  p-5 flex items-center space-x-3 ">
+              <div>
+                <div
+                  className="text-[#A3B0D1] lowercase font-semibold"
+                  style={{ fontSize: "14px" }}
+                >
+                  {displayData.iata}.norda.sol
+                </div>
+                <div
+                  className="text-[#00C853]  font-semibold flex items-center space-x-1"
+                  style={{ fontSize: "14px" }}
+                >
+                  <img
+                    alt="Dollar icon"
+                    className="w-3 h-3 object-contain"
+                    src={dollor}
+                  />
+                  <span>Available</span>
+                </div>
               </div>
-              <div className="text-[#00C853]  font-semibold flex items-center space-x-1" style={{fontSize:"14px"}}>
-                <img
-                  alt="Dollar icon"
-                  className="w-3 h-3 object-contain"
-                  src={dollor}
-                />
-                <span>Available</span>
-              </div>
-            
             </div>
           </div>
-          </div>
-
-         
 
           <div className="flex items-center justify-between max-w-full  py-4 pt-5 ">
-          <div className="flex items-center space-x-1">
-            <div className="w-5 h-5 rounded-full border-2 border-white flex items-center justify-center">
-              <div className="w-2.5 h-2.5 rounded-full bg-white"></div>
+            <div className="flex items-center space-x-1">
+              <div className="w-5 h-5 rounded-full border-2 border-white flex items-center justify-center">
+                <div className="w-2.5 h-2.5 rounded-full bg-white"></div>
+              </div>
+              <span className="text-white text-[16px] font-normal font-['Roboto'] select-none">
+                NOL
+              </span>
             </div>
-            <span className="text-white text-[16px] font-normal font-['Roboto'] select-none">NOL</span>
-          </div>
-         <div
-  className="mt-2 hidden md:block"
-  style={{
-    borderBottom: "1px solid rgba(87, 95, 135, 1)",
-    width: "85%",
-  }}
-></div>
+            <div
+              className="mt-2 hidden md:block"
+              style={{
+                borderBottom: "1px solid rgba(87, 95, 135, 1)",
+                width: "80%",
+              }}
+            ></div>
 
-          <span className="text-white text-[16px] font-normal font-['Roboto'] select-none">{displayData.Price} Nol</span>
-        </div>
+            <span className="text-white text-[16px] font-normal font-['Roboto'] select-none">
+              {displayData.Price} NOL
+            </span>
+          </div>
 
           <button
             onClick={purchaseDomain}

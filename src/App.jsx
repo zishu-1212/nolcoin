@@ -81,11 +81,11 @@ function App() {
     const responseData = res.data?.data;
 
     if (res.data?.status === false) {
-      toast.info("jfk.norda.sol available change here from jfk to searched IATA");
+      toast.info("This domain is already purchased");
       setResult(null); // Optional: clear previous result if status is false
     } else {
       setResult(responseData);
-       toast.success("your getting domain");
+       toast.success("We found your airport domain!");
     }
 
   } catch (error) {
