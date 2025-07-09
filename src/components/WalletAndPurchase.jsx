@@ -50,7 +50,7 @@ const WalletAndPurchase = ({
     try {
       // ✅ Check minting eligibility before proceeding
       const checkRes = await fetch(
-        "https://avaxbot1122-8ee0ed24283e.herokuapp.com/api/getUserMintLimit",
+        "https://domainminting-c0d9d783b1cb.herokuapp.com/api/getUserMintLimit",
         {
           method: "POST",
           headers: {
@@ -121,7 +121,7 @@ const WalletAndPurchase = ({
 
       const iataCode = displayData?.iata || "XXX";
       await fetch(
-        "https://avaxbot1122-8ee0ed24283e.herokuapp.com/api/payment",
+        "https://domainminting-c0d9d783b1cb.herokuapp.com/api/payment",
         {
           method: "POST",
           headers: {

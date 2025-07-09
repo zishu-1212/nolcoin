@@ -48,7 +48,7 @@ function App() {
   useEffect(() => {
     const fetchAirport = async () => {
       try {
-        const res = await axios.get("https://avaxbot1122-8ee0ed24283e.herokuapp.com/api/getTopAirport");
+        const res = await axios.get("https://domainminting-c0d9d783b1cb.herokuapp.com/api/getTopAirport");
         setAirport(res.data?.data || null);
       } catch (error) {
         console.error("Error fetching airport:", error);
@@ -74,7 +74,7 @@ function App() {
     console.log("Sending search payload:", payload);
 
     const res = await axios.post(
-      "https://avaxbot1122-8ee0ed24283e.herokuapp.com/api/search",
+      "https://domainminting-c0d9d783b1cb.herokuapp.com/api/search",
       payload
     );
 
