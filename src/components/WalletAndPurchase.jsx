@@ -193,9 +193,9 @@ const WalletAndPurchase = ({
             <div className="flex justify-between items-start px-4 pt-3">
               <div className="flex items-center space-x-2">
                 <FaStar className="text-yellow-400" />
-                <span className="text-xs text-yellow-400 font-semibold">
-                  Selected Airport
-                </span>
+             <span className="text-xs text-yellow-400 font-semibold">
+  {displayData?.isSearch ? "Selected Airport" : "Recommended"}
+</span>
               </div>
               <div className="bg-[#2E3670] text-white text-md font-semibold rounded px-2 ">
                 {displayData.iata}
@@ -261,7 +261,7 @@ const WalletAndPurchase = ({
             ></div>
 
             <span className="text-white text-[16px] font-normal font-['Roboto'] select-none">
-              {displayData.Price} NOL
+               {Number(displayData.Price).toLocaleString()} NOL
             </span>
           </div>
 

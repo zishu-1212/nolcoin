@@ -4,8 +4,10 @@ const AirportSearch = ({ formData, handleChange, handleSubmit }) => {
     
   return (
     <div className="space-y-6 mt-8">
-      <div className="text-[#A3B0D1] text-center font-semibold">
-        <a target="blank" href="https://www.world-airport-codes.com/"> Search Airport</a>
+      <div className="text-[#A3B0D1] text-center font-semibold flex justify-between">
+        <p> </p>
+        <p>  Airport Code</p>
+        <a target="blank" href="https://www.world-airport-codes.com/"> Find Your Code</a>
        
       </div>
       <form className="space-y-3" onSubmit={handleSubmit}>
