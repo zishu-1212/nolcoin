@@ -157,35 +157,37 @@ const WalletAndPurchase = ({
           </h1>
         </div>
 
-        <div className="px-5 connectwallet1">
-          <div className="px-5 connectwallet">
-            {walletAddress ? (
-              <button
-                onClick={connectWallet}
-                className="flex space-x-4 items-center bg-white text-[#0B1437] text-sm font-semibold rounded py-2 px-3"
-              >
-                <span className="text-[16px] font-bold">
-                  {shortenAddress(walletAddress)}
-                </span>
-              </button>
-            ) : (
-              <button
-                onClick={connectWallet}
-                className="flex space-x-4 items-center bg-white text-[#0B1437] text-sm font-semibold rounded py-2 px-3"
-              >
-                <span className="text-[16px] font-bold">Connect</span>
-                <span className="flex items-center text-black text-[13px] font-bold">
-                  <img
-                    alt="Phantom"
-                    className="w-5 h-5 object-contain mr-1"
-                    src={logo2}
-                  />
-                  Phantom
-                </span>
-              </button>
-            )}
-          </div>
-        </div>
+      <div className="px-5 connectwallet1">
+  <div className="px-5 connectwallet">
+    {walletAddress ? (
+      <button
+        onClick={() => setWalletAddress(null)}
+        className="flex space-x-4 items-center bg-white text-[#0B1437] text-sm font-semibold rounded py-2 px-3"
+      >
+        <span className="text-[16px] font-bold">
+          {shortenAddress(walletAddress)}
+        </span>
+        <span className="text-[13px] font-bold">Disconnect</span>
+      </button>
+    ) : (
+      <button
+        onClick={connectWallet}
+        className="flex space-x-4 items-center bg-white text-[#0B1437] text-sm font-semibold rounded py-2 px-3"
+      >
+        <span className="text-[16px] font-bold">Connect</span>
+        <span className="flex items-center text-black text-[13px] font-bold">
+          <img
+            alt="Phantom"
+            className="w-5 h-5 object-contain mr-1"
+            src={logo2}
+          />
+          Phantom
+        </span>
+      </button>
+    )}
+  </div>
+</div>
+
       </header>
       {displayData && (
         <>

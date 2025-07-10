@@ -12,8 +12,7 @@ const AirportSearch = ({ formData, handleChange, handleSubmit }) => {
           className="text-red "
           style={{ fontSize: "13px", color: "red" }}
         >
-          {" "}
-          Find Your Code !
+         Find Airport Code here !
         </a>
       </div>
       <form className="space-y-3" onSubmit={handleSubmit}>
