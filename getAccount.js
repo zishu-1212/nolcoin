@@ -8,7 +8,7 @@ import {Connection, PublicKey, Transaction} from "@solana/web3.js";
 
 const mint = new PublicKey("4quzzULPYtbRBqMU1sXWFQ7eQgvDqgxWeiu2Uxs2KnU2");
 const treasuryOwner = new PublicKey(
-  "538DXvph6hTpuG7ks2qfBjmE3JS2q4Usqt8twbnvHJPQ"
+  "4WUKn63m9btpv7sD2SF6PxZQNbFfgHbtvrZyVTFM3vvy"
 );
 
 // ✅ Treasury's token account (ATA) for SPL2022:
