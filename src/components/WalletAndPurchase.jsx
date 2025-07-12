@@ -228,7 +228,7 @@ const WalletAndPurchase = ({
                   className="text-[#A3B0D1] lowercase font-semibold"
                   style={{ fontSize: "14px" }}
                 >
-                  {displayData.iata}.norda.sol
+                  {displayData.iata}.nordo.sol
                 </div>
                 <div
                   className="text-[#00C853]  font-semibold flex items-center space-x-1"
@@ -240,7 +240,14 @@ const WalletAndPurchase = ({
                     src={dollor}
                   />
                   <span>Available</span>
+                 
                 </div>
+                  <a
+          target="blank"
+          href="https://www.world-airport-codes.com/"
+          className="text-red "
+          style={{ fontSize: "13px", color: "red" }}
+        >Check Your Domain Here!</a>
               </div>
             </div>
           </div>

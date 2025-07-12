@@ -8,7 +8,7 @@ const AirportSearch = ({ formData, handleChange, handleSubmit }) => {
         <p> Airport Code</p>
         <a
           target="blank"
-          href="https://www.world-airport-codes.com/"
+          href="https://www.sns.id/mydomains"
           className="text-red "
           style={{ fontSize: "13px", color: "red" }}
         >
