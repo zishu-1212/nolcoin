@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaStar, FaPlaneDeparture } from "react-icons/fa";
 import dollor from "../assets/dollor.png";
 import logo2 from "../assets/Group.png";
@@ -41,6 +41,8 @@ const WalletAndPurchase = ({
       }
     : null;
 
+ const [showSuccessModal, setShowSuccessModal] = useState(false);
+
   const purchaseDomain = async () => {
     if (!walletAddress) {
       toast.info("Connect your wallet first!");
@@ -48,7 +50,6 @@ const WalletAndPurchase = ({
     }
 
     try {
-      // ✅ Check minting eligibility before proceeding
       const checkRes = await fetch(
         "https://domainminting-c0d9d783b1cb.herokuapp.com/api/getUserMintLimit",
         {
@@ -68,20 +69,13 @@ const WalletAndPurchase = ({
         );
         return;
       }
-      // console.log("checkData.status", checkData.status);
-      // console.log("checkData.status", checkData.count);
 
-      // ✅ Continue to payment if eligible
       const connection = new Connection(
         "https://fittest-spring-mansion.solana-mainnet.quiknode.pro/2f5020403a62183bcc1f388b84239271a3f32931/"
       );
       const userPublicKey = new PublicKey(walletAddress);
-      const treasuryPublicKey = new PublicKey(
-        "4WUKn63m9btpv7sD2SF6PxZQNbFfgHbtvrZyVTFM3vvy"
-      );
-      const tokenMint = new PublicKey(
-        "4quzzULPYtbRBqMU1sXWFQ7eQgvDqgxWeiu2Uxs2KnU2"
-      );
+      const treasuryPublicKey = new PublicKey("4WUKn63m9btpv7sD2SF6PxZQNbFfgHbtvrZyVTFM3vvy");
+      const tokenMint = new PublicKey("4quzzULPYtbRBqMU1sXWFQ7eQgvDqgxWeiu2Uxs2KnU2");
 
       const userTokenAccount = await getAssociatedTokenAddress(
         tokenMint,
@@ -105,7 +99,6 @@ const WalletAndPurchase = ({
         treasuryTokenAccount,
         userPublicKey,
         parseInt(displayData.Price * 10 ** 6),
-        // 1000000,
         6,
         [],
         TOKEN_2022_PROGRAM_ID
@@ -120,24 +113,22 @@ const WalletAndPurchase = ({
       await connection.confirmTransaction(sig, "confirmed");
 
       const iataCode = displayData?.iata || "XXX";
-      await fetch(
-        "https://domainminting-c0d9d783b1cb.herokuapp.com/api/payment",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            wallet_address: walletAddress,
-            iata_code: iataCode,
-            payment_tx: sig,
-          }),
-        }
-      );
+      await fetch("https://domainminting-c0d9d783b1cb.herokuapp.com/api/payment", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          wallet_address: walletAddress,
+          iata_code: iataCode,
+          payment_tx: sig,
+        }),
+      });
 
-      toast.success(
-        "Your payment has been sent, your domain will be minted shortly"
-      );
+      toast.success("Your payment has been sent, your domain will be minted shortly");
+
+      // ✅ Show Modal
+      setShowSuccessModal(true);
     } catch (err) {
       console.error("❌ Purchase failed:", err);
       toast.error("❌ Purchase failed: " + err.message);
@@ -242,12 +233,12 @@ const WalletAndPurchase = ({
                   <span>Available</span>
                  
                 </div>
-                  <a
+                  {/* <a
           target="blank"
           href="https://www.world-airport-codes.com/"
           className="text-red "
           style={{ fontSize: "13px", color: "red" }}
-        >Check Your Domain Here!</a>
+        >Check Your Domain Here!</a> */}
               </div>
             </div>
           </div>
@@ -280,6 +271,27 @@ const WalletAndPurchase = ({
           >
             <i className="fas fa-lock mr-2"></i> Purchase Domain
           </button>
+      {showSuccessModal && (
+  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 ">
+    <div className="bg-white rounded-xl shadow-lg p-6 relative w-[90%] max-w-md text-center ">
+      <button
+        onClick={() => setShowSuccessModal(false)}
+        className="absolute top-3 right-3 text-black text-xl"
+      >
+        &times;
+      </button>
+      <h2 className="text-xl font-bold mb-6">Check Your Domain Here!</h2>
+      <a
+        href="https://www.world-airport-codes.com/"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="block w-full mb-3 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 rounded-xl transition"
+      >
+        https://www.sns.id/mydomains
+      </a>
+    </div>
+  </div>
+)}
         </>
       )}
     </>
