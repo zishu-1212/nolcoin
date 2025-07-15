@@ -41,7 +41,7 @@ const WalletAndPurchase = ({
       }
     : null;
 
- const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const purchaseDomain = async () => {
     if (!walletAddress) {
@@ -74,8 +74,12 @@ const WalletAndPurchase = ({
         "https://fittest-spring-mansion.solana-mainnet.quiknode.pro/2f5020403a62183bcc1f388b84239271a3f32931/"
       );
       const userPublicKey = new PublicKey(walletAddress);
-      const treasuryPublicKey = new PublicKey("4WUKn63m9btpv7sD2SF6PxZQNbFfgHbtvrZyVTFM3vvy");
-      const tokenMint = new PublicKey("4quzzULPYtbRBqMU1sXWFQ7eQgvDqgxWeiu2Uxs2KnU2");
+      const treasuryPublicKey = new PublicKey(
+        "4WUKn63m9btpv7sD2SF6PxZQNbFfgHbtvrZyVTFM3vvy"
+      );
+      const tokenMint = new PublicKey(
+        "4quzzULPYtbRBqMU1sXWFQ7eQgvDqgxWeiu2Uxs2KnU2"
+      );
 
       const userTokenAccount = await getAssociatedTokenAddress(
         tokenMint,
@@ -113,19 +117,24 @@ const WalletAndPurchase = ({
       await connection.confirmTransaction(sig, "confirmed");
 
       const iataCode = displayData?.iata || "XXX";
-      await fetch("https://domainminting-c0d9d783b1cb.herokuapp.com/api/payment", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          wallet_address: walletAddress,
-          iata_code: iataCode,
-          payment_tx: sig,
-        }),
-      });
+      await fetch(
+        "https://domainminting-c0d9d783b1cb.herokuapp.com/api/payment",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            wallet_address: walletAddress,
+            iata_code: iataCode,
+            payment_tx: sig,
+          }),
+        }
+      );
 
-      toast.success("Your payment has been sent, your domain will be minted shortly");
+      toast.success(
+        "Your payment has been sent, your domain will be minted shortly"
+      );
 
       // ✅ Show Modal
       setShowSuccessModal(true);
@@ -148,37 +157,36 @@ const WalletAndPurchase = ({
           </h1>
         </div>
 
-      <div className="px-5 connectwallet1">
-  <div className="px-5 connectwallet">
-    {walletAddress ? (
-      <button
-        onClick={() => setWalletAddress(null)}
-        className="flex space-x-4 items-center bg-white text-[#0B1437] text-sm font-semibold rounded py-2 px-3"
-      >
-        <span className="text-[16px] font-bold">
-          {shortenAddress(walletAddress)}
-        </span>
-        <span className="text-[13px] font-bold">Disconnect</span>
-      </button>
-    ) : (
-      <button
-        onClick={connectWallet}
-        className="flex space-x-4 items-center bg-white text-[#0B1437] text-sm font-semibold rounded py-2 px-3"
-      >
-        <span className="text-[16px] font-bold">Connect</span>
-        <span className="flex items-center text-black text-[13px] font-bold">
-          <img
-            alt="Phantom"
-            className="w-5 h-5 object-contain mr-1"
-            src={logo2}
-          />
-          Phantom
-        </span>
-      </button>
-    )}
-  </div>
-</div>
-
+        <div className="px-5 connectwallet1">
+          <div className="px-5 connectwallet">
+            {walletAddress ? (
+              <button
+                onClick={() => setWalletAddress(null)}
+                className="flex space-x-4 items-center bg-white text-[#0B1437] text-sm font-semibold rounded py-2 px-3"
+              >
+                <span className="text-[16px] font-bold">
+                  {shortenAddress(walletAddress)}
+                </span>
+                <span className="text-[13px] font-bold">Disconnect</span>
+              </button>
+            ) : (
+              <button
+                onClick={connectWallet}
+                className="flex space-x-4 items-center bg-white text-[#0B1437] text-sm font-semibold rounded py-2 px-3"
+              >
+                <span className="text-[16px] font-bold">Connect</span>
+                <span className="flex items-center text-black text-[13px] font-bold">
+                  <img
+                    alt="Phantom"
+                    className="w-5 h-5 object-contain mr-1"
+                    src={logo2}
+                  />
+                  Phantom
+                </span>
+              </button>
+            )}
+          </div>
+        </div>
       </header>
       {displayData && (
         <>
@@ -186,9 +194,9 @@ const WalletAndPurchase = ({
             <div className="flex justify-between items-start px-4 pt-3">
               <div className="flex items-center space-x-2">
                 <FaStar className="text-yellow-400" />
-             <span className="text-xs text-yellow-400 font-semibold">
-  {displayData?.isSearch ? "Selected Airport" : "Recommended"}
-</span>
+                <span className="text-xs text-yellow-400 font-semibold">
+                  {displayData?.isSearch ? "Selected Airport" : "Recommended"}
+                </span>
               </div>
               <div className="bg-[#2E3670] text-white text-md font-semibold rounded px-2 ">
                 {displayData.iata}
@@ -231,9 +239,8 @@ const WalletAndPurchase = ({
                     src={dollor}
                   />
                   <span>Available</span>
-                 
                 </div>
-                  {/* <a
+                {/* <a
           target="blank"
           href="https://www.world-airport-codes.com/"
           className="text-red "
@@ -261,7 +268,7 @@ const WalletAndPurchase = ({
             ></div>
 
             <span className="text-white text-[16px] font-normal font-['Roboto'] select-none">
-               {Number(displayData.Price).toLocaleString()} NOL
+              {Number(displayData.Price).toLocaleString()} NOL
             </span>
           </div>
 
@@ -271,27 +278,33 @@ const WalletAndPurchase = ({
           >
             <i className="fas fa-lock mr-2"></i> Purchase Domain
           </button>
-      {showSuccessModal && (
-  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 ">
-    <div className="bg-white rounded-xl shadow-lg p-6 relative w-[90%] max-w-md text-center ">
-      <button
-        onClick={() => setShowSuccessModal(false)}
-        className="absolute top-3 right-3 text-black text-xl"
-      >
-        &times;
-      </button>
-      <h2 className="text-xl font-bold mb-6">Check Your Domain Here!</h2>
-      <a
-        href="https://www.world-airport-codes.com/"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="block w-full mb-3 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 rounded-xl transition"
-      >
-        https://www.sns.id/mydomains
-      </a>
-    </div>
-  </div>
-)}
+          {showSuccessModal && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 ">
+            <div className="bg-white rounded-xl shadow-lg p-6 relative w-[90%] max-w-md text-center ">
+              <button
+                onClick={() => setShowSuccessModal(false)}
+                className="absolute top-3 right-3 text-black text-xl"
+              >
+                &times;
+              </button>
+              <h2 className="text-xl font-bold mb-6">
+                Check Your Domain Here!
+              </h2>
+              <a
+                href={`https://www.sns.id/domain/${displayData.iata}.nordo/`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block w-full mb-3 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 rounded-xl transition"
+              >
+                https://www.sns.id/domain/{displayData.iata}.nordo
+              </a>
+                <p className="text-red " style={{ fontSize: "13px", color: "green" }}>
+             Please check the link in about 3 to 5 minutes to confirm the domain purchase.
+            </p>
+            </div>
+          
+          </div>
+          )}
         </>
       )}
     </>
