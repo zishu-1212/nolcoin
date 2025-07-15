@@ -290,21 +290,21 @@ const WalletAndPurchase = ({
               <h2 className="text-xl font-bold mb-6">
                 Check Your Domain Here!
               </h2>
-              <a
-                href={`https://www.sns.id/domain/${displayData.iata}.nordo/`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block w-full mb-3 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 rounded-xl transition"
-              >
-                https://www.sns.id/domain/{displayData.iata}.nordo
-              </a>
+            <a
+  href={`https://www.sns.id/domain/${displayData.iata.toLowerCase()}.nordo/`}
+  target="_blank"
+  rel="noopener noreferrer"
+  className="block w-full mb-3 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 rounded-xl transition"
+>
+  https://www.sns.id/domain/{displayData.iata.toLowerCase()}.nordo
+</a>
                 <p className="text-red " style={{ fontSize: "13px", color: "green" }}>
              Please check the link in about 3 to 5 minutes to confirm the domain purchase.
             </p>
             </div>
           
           </div>
-          )}
+         )}
         </>
       )}
     </>
