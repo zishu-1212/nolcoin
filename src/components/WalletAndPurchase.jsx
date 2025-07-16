@@ -278,7 +278,7 @@ const WalletAndPurchase = ({
           >
             <i className="fas fa-lock mr-2"></i> Purchase Domain
           </button>
-          {/* {showSuccessModal && (   */}
+          {showSuccessModal && (  
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 ">
             <div className="bg-white rounded-xl shadow-lg p-6 relative w-[90%] max-w-md text-center ">
               <button
@@ -304,7 +304,7 @@ const WalletAndPurchase = ({
             </div>
           
           </div>
-        {/* //  )} */}
+         )} 
         </>
       )}
     </>
